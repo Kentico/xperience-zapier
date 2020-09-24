@@ -1,16 +1,31 @@
 ﻿using CMS.Activities;
 using CMS.Automation;
 using CMS.ContactManagement;
+using CMS.Core;
 using CMS.DataEngine;
 using CMS.EventLog;
 using CMS.Helpers;
-using CMS.SiteProvider;
 using System.Linq;
 
 namespace Xperience.Zapier
 {
     public class ZapierContactAutomationAction : ContactAutomationAction
     {
+        private IEventLogService mLogService;
+
+        public IEventLogService LogService
+        {
+            get
+            {
+                if (mLogService == null)
+                {
+                    mLogService = Service.Resolve<IEventLogService>();
+                }
+
+                return mLogService;
+            }
+        }
+
         public override void Execute()
         {
             ActivityInfo activity = null;
@@ -24,7 +39,7 @@ namespace Xperience.Zapier
                     var activityItemID = StateObject.StateCustomData[TriggerDataConstants.TRIGGER_DATA_ACTIVITY_ITEMID];
                     var activityValue = StateObject.StateCustomData[TriggerDataConstants.TRIGGER_DATA_ACTIVITY_VALUE];
                     var activitySiteId = StateObject.StateCustomData[TriggerDataConstants.TRIGGER_DATA_ACTIVITY_SITEID];
-                    var q = ActivityInfoProvider.GetActivities()
+                    var q = ActivityInfo.Provider.Get()
                                         .TopN(1)
                                         .WhereEquals("ActivityItemID", activityItemID)
                                         .WhereEquals("ActivityItemDetailID", activityDetailItemID)
@@ -43,11 +58,11 @@ namespace Xperience.Zapier
                     activity = q.FirstOrDefault();
                 }
 
-                ZapierHelper.SendPostToWebhook(url, SiteContext.CurrentSite, new BaseInfo[] { Contact, activity });
+                ZapierHelper.SendPostToWebhook(url, new BaseInfo[] { Contact, activity });
             }
             else
             {
-                EventLogProvider.LogEvent("W", nameof(ZapierContactAutomationAction), "EXECUTE", $"Marketing automation '{Workflow.WorkflowDisplayName}' step 'Send contact to Zapier' couldn't be processed because it is missing the webhook URL or the contact wasn't found.");
+                LogService.LogEvent(EventTypeEnum.Warning, nameof(ZapierContactAutomationAction), "EXECUTE", $"Marketing automation '{Workflow.WorkflowDisplayName}' step 'Send contact to Zapier' couldn't be processed because it is missing the webhook URL or the contact wasn't found.");
             }
         }
     }
