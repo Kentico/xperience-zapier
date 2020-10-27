@@ -1,0 +1,10 @@
+*
+!.gitignore
+!Xperience.Zapier.csproj
+!packages.Xperience.Zapier.config
+!Properties/Xperience.ZapierAssemblyInfo.cs
+!Old_App_Code/CMSModules/Xperience.Zapier/*
+!App_Data/CMSModules/Xperience.Zapier/**/*
+!CMSModules/Xperience.Zapier/**/*
+!CMSResources/Xperience.Zapier/**
+!/README.md
