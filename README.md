@@ -35,7 +35,7 @@ The code and import files provided by package this were built against the Xperie
 
 ## Feedback & Contributing
 
-Check out the [contributing](https://github.com/kentico-ericd/xperience-core-events/blob/master/CONTRIBUTING.md) page to see the best places to file issues, start discussions, and begin contributing.
+Check out the [contributing](https://github.com/kentico-ericd/xperience-zapier/blob/master/CONTRIBUTING.md) page to see the best places to file issues, start discussions, and begin contributing.
 
 ## License
 
